@@ -65,7 +65,7 @@ const VeterinaryAppointmentScreen = () => {
       >
         <Picker.Item label="-- Seçin --" value="" />
         {vets.map((vet) => (
-          <Picker.Item key={vet.id} label={vet.name} value={vet.id} />
+          <Picker.Item key={vet.user.id} label={vet.user.name} value={vet.id} />
         ))}
       </Picker>
 

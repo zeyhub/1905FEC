@@ -7,22 +7,29 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AddressesService from '../services/addresses';
 
 const AddressListScreen = ({ navigation }) => {
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      title: 'Ev Adresi',
-      district: 'Kadıköy / İstanbul',
-      details: 'Caferağa Mah., Moda Cad., No:12, Daire:4',
-    },
-    {
-      id: 2,
-      title: 'İş Adresi',
-      district: 'Beşiktaş / İstanbul',
-      details: 'Barbaros Mah., Levent Cad., No:8, Kat:5',
-    },
-  ]);
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const data = await AddressesService.getAllAddresses();
+        setAddresses(data);
+      } catch (error) {
+        console.error('Error fetching addresses:', error);
+      }
+    };
+
+    fetchAddresses();
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchAddresses(); // Sayfa odaklandığında adresleri yeniden fetch et
+    });
+
+    return unsubscribe; // Cleanup listener
+  }, [navigation]);
 
   const handleAddAddress = () => {
     navigation.navigate('AddAddressDetails'); // "Yeni Adres Ekle" sayfasına yönlendirme
@@ -32,15 +39,16 @@ const AddressListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Adreslerim</Text>
 
-      <ScrollView contentContainerStyle={styles.listContainer}>
+      {addresses.length > 0 ? <ScrollView contentContainerStyle={styles.listContainer}>
         {addresses.map((item) => (
           <View key={item.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
+            <Text style={styles.cardTitle}>{item.addressTitle}</Text>
             <Text style={styles.cardText}>{item.district}</Text>
-            <Text style={styles.cardText}>{item.details}</Text>
+            <Text style={styles.cardText}>{item.addressNote}</Text>
+            <Text style={styles.cardText}>{item.city}/{item.district}/{item.neighborhood}</Text>
           </View>
         ))}
-      </ScrollView>
+      </ScrollView> : <Text style={{ textAlign: 'center', marginTop: 20 }}>Henüz adres eklenmedi.</Text>}
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddAddress}>
         <Text style={styles.addButtonText}>Yeni Adres Ekle</Text>

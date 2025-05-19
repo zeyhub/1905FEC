@@ -13,9 +13,16 @@ const NotificationsScreen = ({ navigation }) => {
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
-    }
+    };
+
     fetchNotifications();
-  }, []);
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchNotifications(); // Sayfa odaklandığında bildirimleri yeniden fetch et
+    });
+
+    return unsubscribe; // Cleanup listener
+  }, [navigation]);
 
   const renderItem = ({ item }) => (
     <View style={styles.notificationCard}>
