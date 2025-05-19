@@ -1,12 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import SERVICE_URLS from '../constants/service_urls';
 
 const AppointmentService = {
   // Randevu oluşturma
   async createAppointment(petId, vetId, date, note) {
+    const token = await AsyncStorage.getItem('token');
     const response = await fetch(`${SERVICE_URLS.BASE_URL}/appointments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         petId,

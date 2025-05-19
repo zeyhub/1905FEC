@@ -18,6 +18,10 @@ const ProfileScreen = ({ navigation }) => {
   const handleServiceHistoryPress = () => {
     navigation.navigate('ServiceHistory');
   }
+
+  const handleLogoutPress = () => {
+    navigation.navigate('Login');
+  }
   return (
     <View style={styles.container}>
       {/* Üst Kısım */}
@@ -53,6 +57,12 @@ const ProfileScreen = ({ navigation }) => {
         <Text style={styles.optionText}>Hizmet Geçmişim</Text>
         <Ionicons name="chevron-forward" size={20} color="#000" />
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.option} onPress={handleLogoutPress}>
+        <Text style={styles.optionText}>Çıkış Yap</Text>
+        <Ionicons name="chevron-forward" size={20} color="red" />
+      </TouchableOpacity>
+
     </View>
   );
 };

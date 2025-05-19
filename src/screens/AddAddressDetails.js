@@ -7,8 +7,9 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native';
+import AddressesService from '../services/addresses';
 
-const AddAddressScreen = ({ navigation }) => {
+const AddAddressDetails = ({ navigation }) => {
   const [form, setForm] = useState({
     addressLine: '',
     city: '',
@@ -25,9 +26,25 @@ const AddAddressScreen = ({ navigation }) => {
     setForm({ ...form, [field]: value });
   };
 
-  const handleSave = () => {
-    // TODO: Save address to backend
-    navigation.goBack();
+  const handleSave = async () => {
+    try {
+      await AddressesService.addAddress(
+        form.addressLine,
+        form.city,
+        form.district,
+        form.neighborhood,
+        form.building,
+        form.floor,
+        form.apartment,
+        form.addressNote,
+        form.addressTitle,
+        false // isDefault
+      );
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error saving address:', error);
+    }
+    
   };
 
   return (
@@ -100,7 +117,7 @@ const AddAddressScreen = ({ navigation }) => {
   );
 };
 
-export default AddAddressScreen;
+export default AddAddressDetails;
 
 const styles = StyleSheet.create({
   container: {

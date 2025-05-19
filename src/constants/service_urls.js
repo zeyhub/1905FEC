@@ -1,5 +1,5 @@
 const SERVICE_URLS = {
-    BASE_URL: 'https://furevercarebackend2.fly.dev/api'
+    BASE_URL: 'http://localhost:3000/api'
 };
 
 export default SERVICE_URLS;
